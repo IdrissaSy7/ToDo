@@ -61,7 +61,7 @@ const Home = () => {
               value={task}
               onChange={(e) => setTask(e.target.value)}
             />
-            <Button variant="success" type="submit" size="sm">
+            <Button variant="success" type="submit">
               Ajouter
             </Button>
           </Stack>
@@ -78,6 +78,7 @@ const Home = () => {
                 type="switch"
                 id={`switch-${item.id}`}
                 checked={item.completed}
+                isValid={true}
                 onChange={() => handleCompleted(item.id)}
               />
               <Col
@@ -88,16 +89,10 @@ const Home = () => {
                 {item.name}
               </Col>
               <Link to={`/edit/${item.id}`}>
-                <Button variant="success" size="sm">
-                  Modifier
-                </Button>
+                <Button variant="success">Modifier</Button>
               </Link>
               <div className="vr" />
-              <Button
-                variant="danger"
-                size="sm"
-                onClick={() => handleDelete(item.id)}
-              >
+              <Button variant="danger" onClick={() => handleDelete(item.id)}>
                 Supprimer
               </Button>
             </Stack>

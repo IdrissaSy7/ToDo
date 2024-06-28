@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Button, Form, Stack, Container, Row } from "react-bootstrap";
+import { Button, Form, Stack, Container, Row, Col } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -36,9 +36,9 @@ const Edit = () => {
 
   return (
     <Container>
-      <Row className="mt-5">
+      <Row>
         <Form onSubmit={handleSubmit}>
-          <Stack direction="horizontal" gap={3}>
+          <Stack className="mt-5">
             <Form.Control
               className="me-auto"
               type="text"
@@ -46,14 +46,16 @@ const Edit = () => {
               required
               onChange={(e) => setTask(e.target.value)}
             />
-            <Button variant="success" type="submit">
+          </Stack>
+
+          <div className="text-center ">
+            <Button variant="success" type="submit" className="m-3">
               Modifier
             </Button>
-            <div className="vr" />
             <Button variant="secondary" onClick={() => navigate("/")}>
               Fermer
             </Button>
-          </Stack>
+          </div>
         </Form>
       </Row>
     </Container>
