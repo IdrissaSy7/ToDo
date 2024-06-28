@@ -1,114 +1,107 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Stack, Form, Container, Row, Col } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
-import List from "./List";
-import { Link, useNavigate } from "react-router-dom";
-import { v4 as uuid } from "uuid"; // Identifiant unique
+import { Link } from "react-router-dom";
+import { v4 as uuid } from "uuid";
 
 const Home = () => {
-  const navigate = useNavigate();
   const [task, setTask] = useState("");
-  const [taskCompleted, setTaskCompleted] = useState(false);
+  const [tasks, setTasks] = useState([]);
 
+  // Chargement initial des tâches du localStorage
+  useEffect(() => {
+    const savedTasks = JSON.parse(localStorage.getItem("tasks")) || [];
+    setTasks(savedTasks);
+  }, []);
+
+  // Fonction pour sauvegarder les tâches dans le localStorage
+  const saveTasksToLocalStorage = (tasks) => {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+  };
+
+  // Fonction pour ajouter une tâche dans le localStorage
   const handleSubmit = (e) => {
-    e.preventDefault(); // Empêche le comportement par défaut de la fonction
-
-    const ids = uuid(); // Génere un id unique
-    let uniqueId = ids.slice(0, 3); // Extrait les 8 premiers caractères de l'id
-    let a = task;
-    let b = taskCompleted;
-
-    List.push({ id: uniqueId, task: a, taskCompleted: b }); // Ajoute un objet à List
+    e.preventDefault();
+    const newTask = {
+      id: uuid().slice(0, 8),
+      name: task,
+      completed: false,
+    };
+    const newTasks = [...tasks, newTask];
+    setTasks(newTasks);
+    saveTasksToLocalStorage(newTasks);
     setTask("");
-
-    navigate("/"); // Navigue vers la page d'accueil
   };
 
-  // Fonction pour modifier un index
-  const handleEdit = (id, task, taskCompleted) => {
-    localStorage.setItem("Task", task);
-    localStorage.setItem("Id", id);
-    localStorage.setItem("TaskCompleted", taskCompleted);
-  };
-
-  // Fonction pour supprimer un index
+  // Fonction pour supprimer une tâche du localStorage
   const handleDelete = (id) => {
-    let index = List.map(function (e) {
-      return e.id;
-    }).indexOf(id);
-
-    List.splice(index, 1);
-    navigate("/");
+    const updatedTasks = tasks.filter((task) => task.id !== id);
+    setTasks(updatedTasks);
+    saveTasksToLocalStorage(updatedTasks);
   };
 
-  // Fonction pour rayer la tâche
-  const handleCompleted = (item) => {
-    item.taskCompleted = !item.taskCompleted;
-    navigate("/");
+  // Fonction pour marquer une tâche comme complétée ou non
+  const handleCompleted = (id) => {
+    const updatedTasks = tasks.map((task) =>
+      task.id === id ? { ...task, completed: !task.completed } : task
+    );
+    setTasks(updatedTasks);
+    saveTasksToLocalStorage(updatedTasks);
   };
 
   return (
     <Container>
       <Row className="mt-5">
-        <Form>
-          <Stack direction="horizontal" gap={3}>
+        <Form onSubmit={handleSubmit}>
+          <Stack direction="horizontal" gap={2}>
             <Form.Control
               className="me-auto"
               type="text"
               placeholder="Ajoutez votre tâche"
+              value={task}
               onChange={(e) => setTask(e.target.value)}
             />
-            <Button
-              variant="success"
-              onClick={(e) => handleSubmit(e)}
-              type="submit"
-            >
+            <Button variant="success" type="submit" size="sm">
               Ajouter
             </Button>
           </Stack>
         </Form>
-
-        {List && List.length > 0 ? (
-          List.map((item, index) => {
-            return (
-              <Stack
-                direction="horizontal"
-                gap={3}
-                className="mt-3"
-                id={`div-task-${item.id}`}
-                key={index}
+        {tasks.length > 0 ? (
+          tasks.map((item) => (
+            <Stack
+              direction="horizontal"
+              gap={3}
+              className="mt-3"
+              key={item.id}
+            >
+              <Form.Check
+                type="switch"
+                id={`switch-${item.id}`}
+                checked={item.completed}
+                onChange={() => handleCompleted(item.id)}
+              />
+              <Col
+                className={`text-center ${
+                  item.completed ? "text-decoration-line-through" : ""
+                }`}
               >
-                <Form.Check
-                  type="switch"
-                  id={`switch-${item.id}`}
-                  defaultChecked={item.taskCompleted}
-                  isValid={true}
-                  onClick={() => handleCompleted(item)}
-                />
-                <Col
-                  className={`text-center ${
-                    item.taskCompleted ? "text-decoration-line-through" : ""
-                  }`}
-                >
-                  {item.task}
-                </Col>
-                <Link to={`/edit/${item.id}`}>
-                  <Button
-                    variant="success"
-                    onClick={() =>
-                      handleEdit(item.id, item.task, item.taskCompleted)
-                    }
-                  >
-                    Modifier
-                  </Button>
-                </Link>
-                <div className="vr" />
-                <Button variant="danger" onClick={() => handleDelete(item.id)}>
-                  Supprimer
+                {item.name}
+              </Col>
+              <Link to={`/edit/${item.id}`}>
+                <Button variant="success" size="sm">
+                  Modifier
                 </Button>
-              </Stack>
-            );
-          })
+              </Link>
+              <div className="vr" />
+              <Button
+                variant="danger"
+                size="sm"
+                onClick={() => handleDelete(item.id)}
+              >
+                Supprimer
+              </Button>
+            </Stack>
+          ))
         ) : (
           <Col className="mt-3 text-center">Aucune tâche disponible</Col>
         )}

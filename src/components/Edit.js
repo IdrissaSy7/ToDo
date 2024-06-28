@@ -1,39 +1,43 @@
 import React, { useState, useEffect } from "react";
 import { Button, Form, Stack, Container, Row } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
-import List from "./List";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const Edit = () => {
   const [task, setTask] = useState("");
-  const [id, setId] = useState("");
-  const [taskCompleted, setTaskCompleted] = useState("");
-
+  const [taskCompleted, setTaskCompleted] = useState(false);
+  const { id } = useParams(); // Extrait l'id de l'url
   const navigate = useNavigate();
 
-  let index = List.map(function (e) {
-    return e.id;
-  }).indexOf(id);
-
-  const handleSubmit = (e) => {
-    e.preventDefault(); // Empêche le comportement par défaut de la fonction
-
-    let a = List[index];
-    a.task = task;
-
-    navigate("/"); // Navigue vers la page d'accueil
-  };
-
+  // Charge les données de la tâche a éditer
   useEffect(() => {
-    setTask(localStorage.getItem("Task"));
-    setId(localStorage.getItem("Id"));
-    setTaskCompleted(localStorage.getItem(taskCompleted));
-  }, []);
+    const savedTasks = JSON.parse(localStorage.getItem("tasks")) || [];
+    const taskToEdit = savedTasks.find((task) => task.id === id);
+
+    if (taskToEdit) {
+      setTask(taskToEdit.name);
+      setTaskCompleted(taskToEdit.completed);
+    }
+  }, [id]);
+
+  // Envoie la nouvelle tâche dans le localStorage
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const savedTasks = JSON.parse(localStorage.getItem("tasks")) || [];
+    const updatedTasks = savedTasks.map((taskItem) =>
+      taskItem.id === id
+        ? { ...taskItem, name: task, completed: taskCompleted }
+        : taskItem
+    );
+
+    localStorage.setItem("tasks", JSON.stringify(updatedTasks));
+    navigate("/");
+  };
 
   return (
     <Container>
       <Row className="mt-5">
-        <Form>
+        <Form onSubmit={handleSubmit}>
           <Stack direction="horizontal" gap={3}>
             <Form.Control
               className="me-auto"
@@ -41,16 +45,12 @@ const Edit = () => {
               value={task}
               required
               onChange={(e) => setTask(e.target.value)}
-            ></Form.Control>
-            <Button
-              variant="success"
-              onClick={(e) => handleSubmit(e)}
-              type="submit"
-            >
+            />
+            <Button variant="success" type="submit">
               Modifier
             </Button>
             <div className="vr" />
-            <Button variant="success" onClick={() => navigate("/")}>
+            <Button variant="secondary" onClick={() => navigate("/")}>
               Fermer
             </Button>
           </Stack>
