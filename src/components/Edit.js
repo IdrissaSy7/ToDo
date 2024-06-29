@@ -41,7 +41,8 @@ const Edit = () => {
           <Stack className="mt-5">
             <Form.Control
               className="me-auto"
-              type="text"
+              as="textarea"
+              rows={5}
               value={task}
               required
               onChange={(e) => setTask(e.target.value)}

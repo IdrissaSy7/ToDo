@@ -1,0 +1,11 @@
+.div-task {
+  position: relative;
+}
+.div-task::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  width: 90%;
+  height: 1px;
+  background: rgba(25, 135, 84, 0.7254901961);
+}/*# sourceMappingURL=style.css.map */

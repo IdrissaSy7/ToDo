@@ -71,7 +71,7 @@ const Home = () => {
             <Stack
               direction="horizontal"
               gap={3}
-              className="mt-3"
+              className="mt-3 pb-2 div-task"
               key={item.id}
             >
               <Form.Check
@@ -82,17 +82,23 @@ const Home = () => {
                 onChange={() => handleCompleted(item.id)}
               />
               <Col
-                className={`text-center ${
+                className={` ${
                   item.completed ? "text-decoration-line-through" : ""
                 }`}
               >
                 {item.name}
               </Col>
               <Link to={`/edit/${item.id}`}>
-                <Button variant="success">Modifier</Button>
+                <Button className="btnSuccess" size="sm" variant="secondary">
+                  Détails
+                </Button>
               </Link>
-              <div className="vr" />
-              <Button variant="danger" onClick={() => handleDelete(item.id)}>
+              <Button
+                className="btnDanger"
+                variant="danger"
+                size="sm"
+                onClick={() => handleDelete(item.id)}
+              >
                 Supprimer
               </Button>
             </Stack>
