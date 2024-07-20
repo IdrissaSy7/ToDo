@@ -42,7 +42,7 @@ const Edit = () => {
             <Form.Control
               className="me-auto"
               as="textarea"
-              rows={5}
+              rows={3}
               value={task}
               required
               onChange={(e) => setTask(e.target.value)}

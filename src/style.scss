@@ -9,4 +9,20 @@
     height: 1px;
     background: #198754b9;
   }
+
+  .text-decoration-line-through {
+    color: #198754b9;
+  }
+
+  .task-name a {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .btnDanger,
+  .btnSuccess {
+    cursor: pointer;
+    font-size: 0.8rem;
+  }
 }

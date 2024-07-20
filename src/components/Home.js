@@ -61,8 +61,8 @@ const Home = () => {
               value={task}
               onChange={(e) => setTask(e.target.value)}
             />
-            <Button variant="success" type="submit">
-              Ajouter
+            <Button className="btnSuccess" variant="success" type="submit">
+              <i class="fa-solid fa-plus"></i>
             </Button>
           </Stack>
         </Form>
@@ -70,7 +70,7 @@ const Home = () => {
           tasks.map((item) => (
             <Stack
               direction="horizontal"
-              gap={3}
+              gap={2}
               className="mt-3 pb-2 div-task"
               key={item.id}
             >
@@ -86,20 +86,18 @@ const Home = () => {
                   item.completed ? "text-decoration-line-through" : ""
                 }`}
               >
-                {item.name}
+                <span className="task-name">
+                  <Link to={`/edit/${item.id}`}>{item.name}</Link>
+                </span>
               </Col>
-              <Link to={`/edit/${item.id}`}>
-                <Button className="btnSuccess" size="sm" variant="secondary">
-                  Détails
-                </Button>
-              </Link>
+
               <Button
                 className="btnDanger"
                 variant="danger"
                 size="sm"
                 onClick={() => handleDelete(item.id)}
               >
-                Supprimer
+                <i class="fa-solid fa-trash-can"></i>
               </Button>
             </Stack>
           ))
