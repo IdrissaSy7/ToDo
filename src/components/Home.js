@@ -53,7 +53,7 @@ const Home = () => {
     <Container>
       <Row className="mt-5">
         <Form onSubmit={handleSubmit}>
-          <Stack direction="horizontal" gap={2}>
+          <Stack direction="horizontal" gap={2} className="mb-3">
             <Form.Control
               className="me-auto"
               type="text"
@@ -71,7 +71,7 @@ const Home = () => {
             <Stack
               direction="horizontal"
               gap={2}
-              className="mt-3 pb-2 div-task"
+              className="div-task pt-4 pb-4"
               key={item.id}
             >
               <Form.Check
