@@ -7,6 +7,15 @@ import { v4 as uuid } from "uuid";
 const Home = () => {
   const [task, setTask] = useState("");
   const [tasks, setTasks] = useState([]);
+  // Ajout 21/07/24 - détails et date
+  const [details, setDetails] = useState("");
+  const today = new Date();
+  const date = today.getDate();
+  const month =
+    today.getMonth() < 10 ? "0" + (today.getMonth() + 1) : today.getMonth() + 1;
+  const year = today.getFullYear();
+  const currentDate = date + "/" + month + "/" + year;
+  const [dateAdd, setdateAdd] = useState(currentDate);
 
   // Chargement initial des tâches du localStorage
   useEffect(() => {
@@ -26,6 +35,9 @@ const Home = () => {
       id: uuid().slice(0, 8),
       name: task,
       completed: false,
+      // Ajout 21/07/24
+      details: details,
+      date: dateAdd,
     };
     const newTasks = [...tasks, newTask];
     setTasks(newTasks);
@@ -62,7 +74,7 @@ const Home = () => {
               onChange={(e) => setTask(e.target.value)}
             />
             <Button className="btnSuccess" variant="success" type="submit">
-              <i class="fa-solid fa-plus"></i>
+              <i className="fa-solid fa-plus"></i>
             </Button>
           </Stack>
         </Form>
@@ -97,7 +109,7 @@ const Home = () => {
                 size="sm"
                 onClick={() => handleDelete(item.id)}
               >
-                <i class="fa-solid fa-trash-can"></i>
+                <i className="fa-solid fa-trash-can"></i>
               </Button>
             </Stack>
           ))

@@ -5,9 +5,11 @@ import { useNavigate, useParams } from "react-router-dom";
 
 const Edit = () => {
   const [task, setTask] = useState("");
-  const [taskCompleted, setTaskCompleted] = useState(false);
   const { id } = useParams(); // Extrait l'id de l'url
   const navigate = useNavigate();
+  // Ajout 21/07/24
+  const [details, setDetails] = useState("");
+  const [date, setDate] = useState("");
 
   // Charge les données de la tâche a éditer
   useEffect(() => {
@@ -16,7 +18,8 @@ const Edit = () => {
 
     if (taskToEdit) {
       setTask(taskToEdit.name);
-      setTaskCompleted(taskToEdit.completed);
+      setDetails(taskToEdit.details);
+      setDate(taskToEdit.date);
     }
   }, [id]);
 
@@ -26,7 +29,11 @@ const Edit = () => {
     const savedTasks = JSON.parse(localStorage.getItem("tasks")) || [];
     const updatedTasks = savedTasks.map((taskItem) =>
       taskItem.id === id
-        ? { ...taskItem, name: task, completed: taskCompleted }
+        ? {
+            ...taskItem,
+            name: task,
+            details: details,
+          }
         : taskItem
     );
 
@@ -39,21 +46,35 @@ const Edit = () => {
       <Row>
         <Form onSubmit={handleSubmit}>
           <Stack className="mt-5">
+            <h5 className="text-center">Nom de la tâche</h5>
             <Form.Control
               className="me-auto"
               as="textarea"
-              rows={3}
+              rows={2}
               value={task}
               required
               onChange={(e) => setTask(e.target.value)}
             />
           </Stack>
 
+          <Stack className="mt-3">
+            <h5 className="text-center">Détails</h5>
+            <p className="text-center">Créée le {date} </p>
+            <Form.Control
+              className="me-auto"
+              as="textarea"
+              rows={5}
+              value={details}
+              placeholder="Ajoutez ici des détails sur votre tâche"
+              onChange={(e) => setDetails(e.target.value)}
+            />
+          </Stack>
+
           <div className="text-center ">
-            <Button variant="success" type="submit" className="m-3">
+            <Button variant="success" type="submit" className="m-3" size="sm">
               Modifier
             </Button>
-            <Button variant="secondary" onClick={() => navigate("/")}>
+            <Button variant="secondary" size="sm" onClick={() => navigate("/")}>
               Fermer
             </Button>
           </div>
