@@ -78,6 +78,9 @@ const Home = () => {
             </Button>
           </Stack>
         </Form>
+
+        <h6 className="text-center">{tasks.length} tâches</h6>
+
         {tasks.length > 0 ? (
           tasks.map((item) => (
             <Stack
