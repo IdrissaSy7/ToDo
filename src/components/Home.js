@@ -1,5 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { Button, Stack, Form, Container, Row, Col } from "react-bootstrap";
+import {
+  Button,
+  Stack,
+  Form,
+  Container,
+  Row,
+  Col,
+  Accordion,
+  AccordionItem,
+  AccordionHeader,
+  AccordionBody,
+} from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Link } from "react-router-dom";
 import { v4 as uuid } from "uuid";
@@ -16,6 +27,8 @@ const Home = () => {
   const year = today.getFullYear();
   const currentDate = date + "/" + month + "/" + year;
   const [dateAdd, setdateAdd] = useState(currentDate);
+  // Ajout 28/07/24
+  const [type, setType] = useState("");
 
   // Chargement initial des tâches du localStorage
   useEffect(() => {
@@ -38,11 +51,14 @@ const Home = () => {
       // Ajout 21/07/24
       details: details,
       date: dateAdd,
+      type: type,
     };
+
     const newTasks = [...tasks, newTask];
     setTasks(newTasks);
     saveTasksToLocalStorage(newTasks);
     setTask("");
+    console.log(newTasks);
   };
 
   // Fonction pour supprimer une tâche du localStorage
@@ -82,40 +98,130 @@ const Home = () => {
         <h6 className="text-center">{tasks.length} tâches</h6>
 
         {tasks.length > 0 ? (
-          tasks.map((item) => (
-            <Stack
-              direction="horizontal"
-              gap={2}
-              className="div-task pt-4 pb-4"
-              key={item.id}
-            >
-              <Form.Check
-                type="switch"
-                id={`switch-${item.id}`}
-                checked={item.completed}
-                isValid={true}
-                onChange={() => handleCompleted(item.id)}
-              />
-              <Col
-                className={` ${
-                  item.completed ? "text-decoration-line-through" : ""
-                }`}
-              >
-                <span className="task-name">
-                  <Link to={`/edit/${item.id}`}>{item.name}</Link>
-                </span>
-              </Col>
+          <>
+            {tasks
+              .filter((item) => item.type === "")
+              .map((item) => (
+                <Stack
+                  direction="horizontal"
+                  gap={2}
+                  className="div-task pt-4 pb-4"
+                  key={item.id}
+                >
+                  <Form.Check
+                    type="switch"
+                    id={`switch-${item.id}`}
+                    checked={item.completed}
+                    isValid={true}
+                    onChange={() => handleCompleted(item.id)}
+                  />
+                  <Col
+                    className={`${
+                      item.completed ? "text-decoration-line-through" : ""
+                    }`}
+                  >
+                    <span className="task-name">
+                      <Link to={`/edit/${item.id}`}>{item.name}</Link>
+                    </span>
+                  </Col>
 
-              <Button
-                className="btnDanger"
-                variant="danger"
-                size="sm"
-                onClick={() => handleDelete(item.id)}
-              >
-                <i className="fa-solid fa-trash-can"></i>
-              </Button>
-            </Stack>
-          ))
+                  <Button
+                    className="btnDanger"
+                    variant="danger"
+                    size="sm"
+                    onClick={() => handleDelete(item.id)}
+                  >
+                    <i className="fa-solid fa-trash-can"></i>
+                  </Button>
+                </Stack>
+              ))}
+
+            <Accordion flush className="mt-4">
+              <AccordionItem eventKey="0" className="mb-3">
+                <AccordionHeader>Travail</AccordionHeader>
+                <AccordionBody>
+                  {tasks
+                    .filter((item) => item.type === "Travail")
+                    .map((item) => (
+                      <Stack
+                        direction="horizontal"
+                        gap={2}
+                        className="div-task pt-4 pb-4"
+                        key={item.id}
+                      >
+                        <Form.Check
+                          type="switch"
+                          id={`switch-${item.id}`}
+                          checked={item.completed}
+                          isValid={true}
+                          onChange={() => handleCompleted(item.id)}
+                        />
+                        <Col
+                          className={`${
+                            item.completed ? "text-decoration-line-through" : ""
+                          }`}
+                        >
+                          <span className="task-name">
+                            <Link to={`/edit/${item.id}`}>{item.name}</Link>
+                          </span>
+                        </Col>
+
+                        <Button
+                          className="btnDanger"
+                          variant="danger"
+                          size="sm"
+                          onClick={() => handleDelete(item.id)}
+                        >
+                          <i className="fa-solid fa-trash-can"></i>
+                        </Button>
+                      </Stack>
+                    ))}
+                </AccordionBody>
+              </AccordionItem>
+
+              <AccordionItem eventKey="1">
+                <AccordionHeader>Personnel</AccordionHeader>
+                <AccordionBody>
+                  {tasks
+                    .filter((item) => item.type === "Personnel")
+                    .map((item) => (
+                      <Stack
+                        direction="horizontal"
+                        gap={2}
+                        className="div-task pt-4 pb-4"
+                        key={item.id}
+                      >
+                        <Form.Check
+                          type="switch"
+                          id={`switch-${item.id}`}
+                          checked={item.completed}
+                          isValid={true}
+                          onChange={() => handleCompleted(item.id)}
+                        />
+                        <Col
+                          className={`${
+                            item.completed ? "text-decoration-line-through" : ""
+                          }`}
+                        >
+                          <span className="task-name">
+                            <Link to={`/edit/${item.id}`}>{item.name}</Link>
+                          </span>
+                        </Col>
+
+                        <Button
+                          className="btnDanger"
+                          variant="danger"
+                          size="sm"
+                          onClick={() => handleDelete(item.id)}
+                        >
+                          <i className="fa-solid fa-trash-can"></i>
+                        </Button>
+                      </Stack>
+                    ))}
+                </AccordionBody>
+              </AccordionItem>
+            </Accordion>
+          </>
         ) : (
           <Col className="mt-3 text-center">Aucune tâche disponible</Col>
         )}

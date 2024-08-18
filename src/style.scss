@@ -22,3 +22,28 @@
     font-size: 0.8rem;
   }
 }
+
+.accordion-item {
+  border: none;
+}
+
+.accordion-button {
+  border: 3px solid #198754;
+}
+
+.accordion-flush > .accordion-item > .accordion-header .accordion-button,
+.accordion-flush
+  > .accordion-item
+  > .accordion-header
+  .accordion-button.collapsed {
+  border-radius: 15px;
+}
+
+.accordion-button:not(.collapsed) {
+  background: #19875424;
+  color: #006737;
+}
+
+.accordion-button:focus {
+  box-shadow: none;
+}

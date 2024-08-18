@@ -10,16 +10,21 @@ const Edit = () => {
   // Ajout 21/07/24
   const [details, setDetails] = useState("");
   const [date, setDate] = useState("");
+  // Ajout 28/07/24
+  const [type, setType] = useState("");
 
   // Charge les données de la tâche a éditer
   useEffect(() => {
     const savedTasks = JSON.parse(localStorage.getItem("tasks")) || [];
     const taskToEdit = savedTasks.find((task) => task.id === id);
 
+    console.log(taskToEdit);
+
     if (taskToEdit) {
       setTask(taskToEdit.name);
       setDetails(taskToEdit.details);
       setDate(taskToEdit.date);
+      setType(taskToEdit.type);
     }
   }, [id]);
 
@@ -33,6 +38,7 @@ const Edit = () => {
             ...taskItem,
             name: task,
             details: details,
+            type: type,
           }
         : taskItem
     );
@@ -55,6 +61,17 @@ const Edit = () => {
               required
               onChange={(e) => setTask(e.target.value)}
             />
+          </Stack>
+
+          <Stack className="mt-3 text-center">
+            <label>
+              Type :{" "}
+              <select value={type} onChange={(e) => setType(e.target.value)}>
+                <option value="">-- Sélectionnez une catégorie --</option>
+                <option value="Travail">Travail</option>
+                <option value="Personnel">Personnel</option>
+              </select>
+            </label>
           </Stack>
 
           <Stack className="mt-3">
