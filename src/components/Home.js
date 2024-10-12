@@ -136,7 +136,7 @@ const Home = () => {
                 </Stack>
               ))}
 
-            <Accordion flush className="mt-4">
+            <Accordion defaultActiveKey="0" flush className="mt-4">
               <AccordionItem eventKey="0" className="mb-3">
                 <AccordionHeader>Travail</AccordionHeader>
                 <AccordionBody>
