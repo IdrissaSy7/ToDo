@@ -28,7 +28,7 @@ const Home = () => {
   const currentDate = date + "/" + month + "/" + year;
   const [dateAdd, setdateAdd] = useState(currentDate);
   // Ajout 28/07/24
-  const [type, setType] = useState("");
+  const [type, setType] = useState("Travail");
 
   // Chargement initial des tâches du localStorage
   useEffect(() => {
