@@ -12,6 +12,8 @@ const Edit = () => {
   const [date, setDate] = useState("");
   // Ajout 28/07/24
   const [type, setType] = useState("");
+  // Ajout 09/08/25
+  const [urgent, setUrgent] = useState("");
 
   // Charge les données de la tâche a éditer
   useEffect(() => {
@@ -25,6 +27,7 @@ const Edit = () => {
       setDetails(taskToEdit.details);
       setDate(taskToEdit.date);
       setType(taskToEdit.type);
+      setUrgent(taskToEdit.urgent);
     }
   }, [id]);
 
@@ -37,8 +40,9 @@ const Edit = () => {
         ? {
             ...taskItem,
             name: task,
-            details: details,
             type: type,
+            details: details,
+            urgent: urgent,
           }
         : taskItem
     );
@@ -67,9 +71,23 @@ const Edit = () => {
             <label>
               Type :{" "}
               <select value={type} onChange={(e) => setType(e.target.value)}>
-                <option value="">-- Sélectionnez une catégorie --</option>
-                <option value="Travail">Travail</option>
-                <option value="Personnel">Personnel</option>
+                <option value="">Sans filtre</option>
+                <option value="travail">Travail</option>
+                <option value="personnel">Personnel</option>
+              </select>
+            </label>
+          </Stack>
+
+          <Stack className="mt-3 text-center">
+            <label>
+              Criticité :{" "}
+              <select
+                value={urgent}
+                onChange={(e) => setUrgent(e.target.value)}
+              >
+                <option value="faible">Faible</option>
+                <option value="moyenne">Moyenne</option>
+                <option value="importante">Importante</option>
               </select>
             </label>
           </Stack>

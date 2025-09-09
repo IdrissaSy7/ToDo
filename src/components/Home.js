@@ -28,7 +28,9 @@ const Home = () => {
   const currentDate = date + "/" + month + "/" + year;
   const [dateAdd, setdateAdd] = useState(currentDate);
   // Ajout 28/07/24
-  const [type, setType] = useState("Travail");
+  const [type, setType] = useState("");
+  // Ajout 09/08/25
+  const [urgent, setUrgent] = useState("faible");
 
   // Chargement initial des tâches du localStorage
   useEffect(() => {
@@ -52,6 +54,8 @@ const Home = () => {
       details: details,
       date: dateAdd,
       type: type,
+      // Ajout 09/08/25
+      urgent: urgent,
     };
 
     const newTasks = [...tasks, newTask];
@@ -97,6 +101,8 @@ const Home = () => {
 
         <h6 className="text-center">{tasks.length} tâches</h6>
 
+        {/* Sans filtre */}
+
         {tasks.length > 0 ? (
           <>
             {tasks
@@ -116,9 +122,9 @@ const Home = () => {
                     onChange={() => handleCompleted(item.id)}
                   />
                   <Col
-                    className={`${
+                    className={` ${
                       item.completed ? "text-decoration-line-through" : ""
-                    }`}
+                    } ${item.urgent} `}
                   >
                     <span className="task-name">
                       <Link to={`/edit/${item.id}`}>{item.name}</Link>
@@ -136,12 +142,14 @@ const Home = () => {
                 </Stack>
               ))}
 
+            {/* Travail */}
+
             <Accordion defaultActiveKey="0" flush className="mt-4">
               <AccordionItem eventKey="0" className="mb-3">
                 <AccordionHeader>Travail</AccordionHeader>
                 <AccordionBody>
                   {tasks
-                    .filter((item) => item.type === "Travail")
+                    .filter((item) => item.type === "travail")
                     .map((item) => (
                       <Stack
                         direction="horizontal"
@@ -156,16 +164,16 @@ const Home = () => {
                           isValid={true}
                           onChange={() => handleCompleted(item.id)}
                         />
+
                         <Col
-                          className={`${
+                          className={` ${
                             item.completed ? "text-decoration-line-through" : ""
-                          }`}
+                          } ${item.urgent} `}
                         >
                           <span className="task-name">
                             <Link to={`/edit/${item.id}`}>{item.name}</Link>
                           </span>
                         </Col>
-
                         <Button
                           className="btnDanger"
                           variant="danger"
@@ -179,11 +187,13 @@ const Home = () => {
                 </AccordionBody>
               </AccordionItem>
 
+              {/* Personnel */}
+
               <AccordionItem eventKey="1">
                 <AccordionHeader>Personnel</AccordionHeader>
                 <AccordionBody>
                   {tasks
-                    .filter((item) => item.type === "Personnel")
+                    .filter((item) => item.type === "personnel")
                     .map((item) => (
                       <Stack
                         direction="horizontal"
@@ -199,9 +209,9 @@ const Home = () => {
                           onChange={() => handleCompleted(item.id)}
                         />
                         <Col
-                          className={`${
+                          className={` ${
                             item.completed ? "text-decoration-line-through" : ""
-                          }`}
+                          } ${item.urgent} `}
                         >
                           <span className="task-name">
                             <Link to={`/edit/${item.id}`}>{item.name}</Link>
